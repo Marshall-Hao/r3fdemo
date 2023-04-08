@@ -11,6 +11,7 @@ import Experience1 from "./experience1";
 import Experience2 from "./experience2";
 import Experience3 from "./Experience3";
 import Experience4 from "./Experience4";
+import Stage1 from "./Stage1";
 
 function App() {
   // const created = ({ gl, scene }) => {
@@ -49,11 +50,12 @@ function App() {
     >
       {/* <scene></scene> */}
       // * attach to the scene background attr
-      <color attach="background" args={["salmon"]}></color>
+      {/* <color attach="background" args={["salmon"]}></color> */}
       {/* <Experience1></Experience1> */}
       {/* <Experience2></Experience2> */}
       {/* <Experience3></Experience3> */}
-      <Experience4></Experience4>
+      {/* <Experience4></Experience4> */}
+      <Stage1></Stage1>
     </Canvas>
   );
 }
