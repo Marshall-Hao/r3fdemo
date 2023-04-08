@@ -4,8 +4,10 @@ import {
   Center,
   useMatcapTexture,
 } from "@react-three/drei";
+import { useFrame } from "@react-three/fiber";
 import { Perf } from "r3f-perf";
-import { useState, useEffect } from "react";
+
+import { useState, useEffect, useRef } from "react";
 import {
   TorusGeometry,
   MeshMatcapMaterial,
@@ -21,6 +23,7 @@ export default function Experience6() {
     // * texture width
     256
   );
+  const donutsGroup = useRef();
 
   useEffect(() => {
     // * need to mannually change the RGB encoding way
@@ -31,6 +34,13 @@ export default function Experience6() {
     // * update
     material.needsUpdate = true;
   }, []);
+
+  useFrame((state, delta) => {
+    // * all the meshes under the group
+    for (const donut of donutsGroup.current.children) {
+      donut.rotation.y += delta * Math.random() * 10;
+    }
+  });
   // const [torusGeometry, setTorusGeometry] = useState();
   // const [material, setMaterial] = useState();
   return (
@@ -63,25 +73,27 @@ export default function Experience6() {
           HELLO R3F
         </Text3D>
       </Center>
-      {[...Array(100)].map((i, index) => (
-        <mesh
-          key={index}
-          position={[
-            (Math.random() - 0.5) * 10,
-            (Math.random() - 0.5) * 10,
-            (Math.random() - 0.5) * 10,
-          ]}
-          scale={0.2 + Math.random() * 0.2}
-          rotation={[
-            Math.random() * Math.PI,
-            Math.random() * Math.PI,
-            0,
-          ]}
-          // * big optimization, will point to the same state,only 1 geometry for same obj
-          geometry={torusGeometry}
-          material={material}
-        ></mesh>
-      ))}
+      <group ref={donutsGroup}>
+        {[...Array(100)].map((i, index) => (
+          <mesh
+            key={index}
+            position={[
+              (Math.random() - 0.5) * 10,
+              (Math.random() - 0.5) * 10,
+              (Math.random() - 0.5) * 10,
+            ]}
+            scale={0.2 + Math.random() * 0.2}
+            rotation={[
+              Math.random() * Math.PI,
+              Math.random() * Math.PI,
+              0,
+            ]}
+            // * big optimization, will point to the same state,only 1 geometry for same obj
+            geometry={torusGeometry}
+            material={material}
+          ></mesh>
+        ))}
+      </group>
     </>
   );
 }
