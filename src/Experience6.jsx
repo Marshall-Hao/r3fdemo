@@ -5,6 +5,7 @@ import {
   useMatcapTexture,
 } from "@react-three/drei";
 import { Perf } from "r3f-perf";
+import { useState } from "react";
 
 export default function Experience6() {
   // * will get texture from repo directly
@@ -14,11 +15,22 @@ export default function Experience6() {
     256
   );
 
+  const [torusGeometry, setTorusGeometry] = useState();
+  const [material, setMaterial] = useState();
   return (
     <>
       <Perf position="top-left" />
       <OrbitControls makeDefault />
       // * must have font as json format
+      <torusGeometry
+        // ! ref will call this fn,set this state to the obj value, good learn
+        ref={setTorusGeometry}
+        args={[1, 0.6, 16, 32]}
+      />
+      <meshMatcapMaterial
+        ref={setMaterial}
+        matcap={matcapTexture}
+      />
       <Center>
         <Text3D
           font="./fonts/helvetiker_regular.typeface.json"
@@ -30,11 +42,9 @@ export default function Experience6() {
           bevelSize={0.02}
           bevelOffset={0}
           bevelSegments={5}
+          material={material}
         >
           HELLO R3F
-          <meshMatcapMaterial
-            matcap={matcapTexture}
-          ></meshMatcapMaterial>
         </Text3D>
       </Center>
       {[...Array(100)].map((i, index) => (
@@ -51,10 +61,10 @@ export default function Experience6() {
             Math.random() * Math.PI,
             0,
           ]}
-        >
-          <torusGeometry args={[1, 0.6, 16, 32]} />
-          <meshMatcapMaterial matcap={matcapTexture} />
-        </mesh>
+          // * big optimization, will point to the same state,only 1 geometry for same obj
+          geometry={torusGeometry}
+          material={material}
+        ></mesh>
       ))}
     </>
   );
