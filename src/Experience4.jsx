@@ -9,6 +9,8 @@ import {
   RandomizedLight,
   ContactShadows,
   Sky,
+  Environment,
+  Lightformer,
 } from "@react-three/drei";
 import { useRef } from "react";
 import { Perf } from "r3f-perf";
@@ -38,10 +40,62 @@ function Experience4() {
   const { sunPosition } = useControls("sky", {
     sunPosition: { value: [1, 2, 3] },
   });
+
+  const {
+    envMapIntensity,
+    envMapHeight,
+    envMapRadius,
+    envMapScale,
+  } = useControls("environment map", {
+    envMapIntensity: { value: 7, min: 0, max: 12 },
+    envMapHeight: { value: 7, min: 0, max: 100 },
+    envMapRadius: { value: 28, min: 10, max: 1000 },
+    envMapScale: { value: 100, min: 10, max: 1000 },
+  });
   return (
     <>
-      // * only baking the shadow at begining,once only
-      ,optimization
+      <Environment
+        // * make as bg env
+        background
+        // files={[
+        //   "./environmentMaps/2/px.jpg",
+        //   "./environmentMaps/2/nx.jpg",
+        //   "./environmentMaps/2/py.jpg",
+        //   "./environmentMaps/2/ny.jpg",
+        //   "./environmentMaps/2/pz.jpg",
+        //   "./environmentMaps/2/nz.jpg",
+        // ]}
+        preset="sunset"
+        // * feels like on the ground
+        ground={{
+          height: envMapHeight,
+          radius: envMapRadius,
+          scale: envMapScale,
+        }}
+
+        // files="./environmentMaps/the_sky_is_on_fire_2k.hdr"
+      >
+        {/* <color
+          args={["#000000"]}
+          attach="background"
+        ></color> */}
+        {/* <mesh position-z={-5} scale={10}>
+          <planeGeometry></planeGeometry>
+          <meshBasicMaterial
+            color={[10, 0, 0]}
+          ></meshBasicMaterial>
+        </mesh> */}
+        {/* // * simulate as a light in the env
+        <Lightformer
+          position-z={-5}
+          scale={10}
+          color="red"
+          intensity={10}
+          form="ring"
+        ></Lightformer> */}
+      </Environment>
+      {/* // * only baking the shadow at begining,once only // *
+  ,optimization */}
       {/* <BakeShadows></BakeShadows> */}
       {/* <SoftShadows
         frustum={3.75}
@@ -52,9 +106,9 @@ function Experience4() {
       /> */}
       <Perf position="top-left" />
       <OrbitControls makeDefault></OrbitControls>
-      // * accumulate multiple shadow renders,composed of a
+      {/* // * accumulate multiple shadow renders,composed of a
       // *bunch of renders from various angles //* doing own
-      // *thing on the side, need seperate lights
+      // *thing on the side, need seperate lights */}
       {/* <AccumulativeShadows
         position={[0, -0.99, 0]}
         scale={10}
@@ -90,7 +144,7 @@ function Experience4() {
         // * only render on once ,first frame
         frames={1}
       ></ContactShadows>
-      <directionalLight
+      {/* <directionalLight
         castShadow
         ref={directionalLight}
         position={sunPosition}
@@ -103,31 +157,43 @@ function Experience4() {
         shadow-camera-right={5}
         shadow-camera-bottom={-5}
         shadow-camera-left={-5}
-      ></directionalLight>
-      <ambientLight intensity={0.5}></ambientLight>
-      <Sky sunPosition={sunPosition}></Sky>
-      <mesh position-x={-2} castShadow>
+      ></directionalLight> */}
+      {/* <ambientLight intensity={0.5}></ambientLight> */}
+      {/* <Sky sunPosition={sunPosition}></Sky> */}
+      <mesh position-x={-2} position-y={1} castShadow>
         <sphereGeometry />
-        <meshStandardMaterial color="orange" />
+        <meshStandardMaterial
+          color="orange"
+          // * env map project to the material ,cause some color effect
+          envMapIntensity={envMapIntensity}
+        />
       </mesh>
       <mesh
         castShadow
         rotation-y={Math.PI * 0.25}
         position-x={2}
+        position-y={1}
         scale={1.5}
         ref={cube}
       >
         <boxGeometry />
-        <meshStandardMaterial color="mediumpurple" />
+        <meshStandardMaterial
+          color="mediumpurple"
+          envMapIntensity={envMapIntensity}
+        />
       </mesh>
       <mesh
         // receiveShadow
-        position-y={-1}
+
+        position-y={0}
         rotation-x={-Math.PI * 0.5}
         scale={10}
       >
         <planeGeometry />
-        <meshStandardMaterial color="greenyellow" />
+        <meshStandardMaterial
+          color="greenyellow"
+          envMapIntensity={envMapIntensity}
+        />
       </mesh>
     </>
   );
