@@ -5,7 +5,14 @@ import {
   useMatcapTexture,
 } from "@react-three/drei";
 import { Perf } from "r3f-perf";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import {
+  TorusGeometry,
+  MeshMatcapMaterial,
+  sRGBEncoding,
+} from "three";
+const torusGeometry = new TorusGeometry(1, 0.6, 16, 32);
+const material = new MeshMatcapMaterial();
 
 export default function Experience6() {
   // * will get texture from repo directly
@@ -15,14 +22,23 @@ export default function Experience6() {
     256
   );
 
-  const [torusGeometry, setTorusGeometry] = useState();
-  const [material, setMaterial] = useState();
+  useEffect(() => {
+    // * need to mannually change the RGB encoding way
+    matcapTexture.encoding = sRGBEncoding;
+    // * and update
+    matcapTexture.needsUpdate = true;
+    material.matcap = matcapTexture;
+    // * update
+    material.needsUpdate = true;
+  }, []);
+  // const [torusGeometry, setTorusGeometry] = useState();
+  // const [material, setMaterial] = useState();
   return (
     <>
       <Perf position="top-left" />
       <OrbitControls makeDefault />
       // * must have font as json format
-      <torusGeometry
+      {/* <torusGeometry
         // ! ref will call this fn,set this state to the obj value, good learn
         ref={setTorusGeometry}
         args={[1, 0.6, 16, 32]}
@@ -30,7 +46,7 @@ export default function Experience6() {
       <meshMatcapMaterial
         ref={setMaterial}
         matcap={matcapTexture}
-      />
+      /> */}
       <Center>
         <Text3D
           font="./fonts/helvetiker_regular.typeface.json"
