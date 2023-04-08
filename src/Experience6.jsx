@@ -23,8 +23,8 @@ export default function Experience6() {
     // * texture width
     256
   );
-  const donutsGroup = useRef();
-
+  // const donutsGroup = useRef();
+  const donuts = useRef([]);
   useEffect(() => {
     // * need to mannually change the RGB encoding way
     matcapTexture.encoding = sRGBEncoding;
@@ -37,8 +37,11 @@ export default function Experience6() {
 
   useFrame((state, delta) => {
     // * all the meshes under the group
-    for (const donut of donutsGroup.current.children) {
-      donut.rotation.y += delta * Math.random() * 10;
+    // for (const donut of donutsGroup.current.children) {
+    //   donut.rotation.y += delta * Math.random() * 10;
+    // }
+    for (const donut of donuts.current) {
+      donut.rotation.y += delta * 0.2;
     }
   });
   // const [torusGeometry, setTorusGeometry] = useState();
@@ -73,27 +76,31 @@ export default function Experience6() {
           HELLO R3F
         </Text3D>
       </Center>
-      <group ref={donutsGroup}>
-        {[...Array(100)].map((i, index) => (
-          <mesh
-            key={index}
-            position={[
-              (Math.random() - 0.5) * 10,
-              (Math.random() - 0.5) * 10,
-              (Math.random() - 0.5) * 10,
-            ]}
-            scale={0.2 + Math.random() * 0.2}
-            rotation={[
-              Math.random() * Math.PI,
-              Math.random() * Math.PI,
-              0,
-            ]}
-            // * big optimization, will point to the same state,only 1 geometry for same obj
-            geometry={torusGeometry}
-            material={material}
-          ></mesh>
-        ))}
-      </group>
+      {/* <group ref={donutsGroup}> */}
+      {[...Array(100)].map((i, index) => (
+        <mesh
+          ref={(ele) => {
+            // * prevent every re-render, it will be added again, since ref
+            donuts.current[index] = ele;
+          }}
+          key={index}
+          position={[
+            (Math.random() - 0.5) * 10,
+            (Math.random() - 0.5) * 10,
+            (Math.random() - 0.5) * 10,
+          ]}
+          scale={0.2 + Math.random() * 0.2}
+          rotation={[
+            Math.random() * Math.PI,
+            Math.random() * Math.PI,
+            0,
+          ]}
+          // * big optimization, will point to the same state,only 1 geometry for same obj
+          geometry={torusGeometry}
+          material={material}
+        ></mesh>
+      ))}
+      {/* </group> */}
     </>
   );
 }
