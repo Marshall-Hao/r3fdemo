@@ -84,6 +84,7 @@ function Experience2() {
         </mesh>
         <Float speed={5} floatIntensity={2}>
           <Text
+            // * 2D
             fontSize={1}
             color="salmon"
             position-y={2}
