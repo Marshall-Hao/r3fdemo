@@ -8,6 +8,7 @@ import {
   AccumulativeShadows,
   RandomizedLight,
   ContactShadows,
+  Sky,
 } from "@react-three/drei";
 import { useRef } from "react";
 import { Perf } from "r3f-perf";
@@ -34,6 +35,9 @@ function Experience4() {
     }
   );
 
+  const { sunPosition } = useControls("sky", {
+    sunPosition: { value: [1, 2, 3] },
+  });
   return (
     <>
       // * only baking the shadow at begining,once only
@@ -89,7 +93,7 @@ function Experience4() {
       <directionalLight
         castShadow
         ref={directionalLight}
-        position={[1, 2, 3]}
+        position={sunPosition}
         intensity={1.5}
         // * means show.mapSize.set
         shadow-mapSize={[1024, 1024]}
@@ -101,6 +105,7 @@ function Experience4() {
         shadow-camera-left={-5}
       ></directionalLight>
       <ambientLight intensity={0.5}></ambientLight>
+      <Sky sunPosition={sunPosition}></Sky>
       <mesh position-x={-2} castShadow>
         <sphereGeometry />
         <meshStandardMaterial color="orange" />
