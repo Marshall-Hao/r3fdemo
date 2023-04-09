@@ -16,6 +16,8 @@ import Experience5 from "./Experience5";
 import Experience6 from "./Experience6";
 import Experience7 from "./Experience7";
 import Experience8 from "./Experience8";
+import Experience from "./basic";
+import Experience9 from "./Experience9";
 
 function App() {
   // const created = ({ gl, scene }) => {
@@ -55,7 +57,7 @@ function App() {
       // onCreated={created}
     >
       {/* <scene></scene> */}
-      // * attach to the scene background attr
+      {/* // * attach to the scene background attr */}
       {/* <color attach="background" args={["salmon"]}></color> */}
       {/* <Experience1></Experience1> */}
       {/* <Experience2></Experience2> */}
@@ -65,7 +67,8 @@ function App() {
       {/* <Experience5></Experience5> */}
       {/* <Experience6></Experience6> */}
       {/* <Experience7></Experience7> */}
-      <Experience8></Experience8>
+      {/* <Experience8></Experience8> */}
+      <Experience9></Experience9>
     </Canvas>
   );
 }

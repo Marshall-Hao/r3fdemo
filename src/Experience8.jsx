@@ -3,6 +3,7 @@ import {
   OrbitControls,
   useGLTF,
   meshBounds,
+  // * for complex geometries
   useBVH,
 } from "@react-three/drei";
 import { useRef } from "react";
