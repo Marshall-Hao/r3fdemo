@@ -1,16 +1,21 @@
 import { useFrame } from "@react-three/fiber";
-import { OrbitControls } from "@react-three/drei";
+import {
+  OrbitControls,
+  useGLTF,
+  meshBounds,
+  useBVH,
+} from "@react-three/drei";
 import { useRef } from "react";
 
 export default function Experience8() {
   const cube = useRef();
+  const hamburger = useGLTF("./hamburger.glb");
 
   useFrame((state, delta) => {
     cube.current.rotation.y += delta * 0.2;
   });
 
   const eventHandler = (e) => {
-    console.log(e);
     cube.current.material.color.set(
       // * hsl good for 0 ~ 1
       `hsl(${Math.random() * 360}, 100%, 75%)`
@@ -27,7 +32,13 @@ export default function Experience8() {
       />
       <ambientLight intensity={0.5} />
 
-      <mesh position-x={-2}>
+      <mesh
+        position-x={-2}
+        onClick={(e) => {
+          // * prevent event bubble
+          e.stopPropagation();
+        }}
+      >
         <sphereGeometry />
         <meshStandardMaterial color="orange" />
       </mesh>
@@ -36,11 +47,22 @@ export default function Experience8() {
         ref={cube}
         position-x={2}
         scale={1.5}
-        // onClick={eventHandler}
+        onClick={eventHandler}
+        // * virtual boundes sphere, perf optimization
+        raycast={meshBounds}
         // onDoubleClick={eventHandler}
         // onContextMenu={eventHandler}
         // onPointerDown
         // onPointerUp
+        // onPointerMove
+        // onPointerMissed
+        // * change the cursor shape
+        onPointerEnter={() => {
+          document.body.style.cursor = "pointer";
+        }}
+        onPointerLeave={() => {
+          document.body.style.cursor = "default";
+        }}
       >
         <boxGeometry />
         <meshStandardMaterial color="mediumpurple" />
@@ -54,6 +76,17 @@ export default function Experience8() {
         <planeGeometry />
         <meshStandardMaterial color="greenyellow" />
       </mesh>
+
+      <primitive
+        scale={0.25}
+        object={hamburger.scene}
+        position-y={0.5}
+        // * will click the gourp of meshes together, because the ray will through the meshes
+        onClick={(event) => {
+          event.stopPropagation();
+          console.log(event.object.name);
+        }}
+      ></primitive>
     </>
   );
 }
