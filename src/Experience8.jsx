@@ -2,12 +2,20 @@ import { useFrame } from "@react-three/fiber";
 import { OrbitControls } from "@react-three/drei";
 import { useRef } from "react";
 
-export default function Experience() {
+export default function Experience8() {
   const cube = useRef();
 
   useFrame((state, delta) => {
     cube.current.rotation.y += delta * 0.2;
   });
+
+  const eventHandler = (e) => {
+    console.log(e);
+    cube.current.material.color.set(
+      // * hsl good for 0 ~ 1
+      `hsl(${Math.random() * 360}, 100%, 75%)`
+    );
+  };
 
   return (
     <>
@@ -24,7 +32,16 @@ export default function Experience() {
         <meshStandardMaterial color="orange" />
       </mesh>
 
-      <mesh ref={cube} position-x={2} scale={1.5}>
+      <mesh
+        ref={cube}
+        position-x={2}
+        scale={1.5}
+        // onClick={eventHandler}
+        // onDoubleClick={eventHandler}
+        // onContextMenu={eventHandler}
+        // onPointerDown
+        // onPointerUp
+      >
         <boxGeometry />
         <meshStandardMaterial color="mediumpurple" />
       </mesh>

@@ -14,6 +14,8 @@ import Experience4 from "./Experience4";
 import Stage1 from "./Stage1";
 import Experience5 from "./Experience5";
 import Experience6 from "./Experience6";
+import Experience7 from "./Experience7";
+import Experience8 from "./Experience8";
 
 function App() {
   // const created = ({ gl, scene }) => {
@@ -25,6 +27,8 @@ function App() {
 
   return (
     <Canvas
+      // * prevent the r3f default toneMapping
+      flat
       shadows
       // * handle pixelration, if 3 * 3 , it will render 9 times, bad performance, restricts it
       dpr={[1, 2]}
@@ -59,7 +63,9 @@ function App() {
       {/* <Experience4></Experience4> */}
       {/* <Stage1></Stage1> */}
       {/* <Experience5></Experience5> */}
-      <Experience6></Experience6>
+      {/* <Experience6></Experience6> */}
+      {/* <Experience7></Experience7> */}
+      <Experience8></Experience8>
     </Canvas>
   );
 }
