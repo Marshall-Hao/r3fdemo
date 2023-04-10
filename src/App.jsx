@@ -18,6 +18,7 @@ import Experience7 from "./Experience7";
 import Experience8 from "./Experience8";
 import Experience from "./basic";
 import Experience9 from "./Experience9";
+import PhysicsExperience from "./Physics/Physics";
 
 function App() {
   // const created = ({ gl, scene }) => {
@@ -68,7 +69,8 @@ function App() {
       {/* <Experience6></Experience6> */}
       {/* <Experience7></Experience7> */}
       {/* <Experience8></Experience8> */}
-      <Experience9></Experience9>
+      {/* <Experience9></Experience9> */}
+      <PhysicsExperience></PhysicsExperience>
     </Canvas>
   );
 }
