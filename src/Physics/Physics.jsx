@@ -18,8 +18,10 @@ export default function PhysicsExperience() {
 
   const cubeJump = () => {
     console.log("jump");
+    const mass = cube.current.mass();
     // * 一个脉冲量
-    cube.current.applyImpulse({ x: 0, y: 5, z: 0 });
+    // * use mass as a factor here,to simulate a feeling
+    cube.current.applyImpulse({ x: 0, y: 5 * mass, z: 0 });
     // * 一个 转脉冲量
     cube.current.applyTorqueImpulse({
       x: Math.random() - 0.5,
@@ -90,6 +92,8 @@ export default function PhysicsExperience() {
           gravityScale={1}
           // * bounce rate
           restitution={1}
+          friction={0.7}
+          colliders={false}
         >
           {/* <mesh
             ref={cube}
@@ -109,13 +113,19 @@ export default function PhysicsExperience() {
           >
             <boxGeometry args={[1, 1, 1]} />
             <meshStandardMaterial color="mediumpurple" />
+            <CuboidCollider
+              mass={2}
+              args={[0.5, 0.5, 0.5]}
+            ></CuboidCollider>
           </mesh>
         </RigidBody>
 
         <RigidBody
           // * no go through,will stay there,but need rigid body to make collision
           type="fixed"
-          restitution={1}
+          // restitution={1}
+          // * friction
+          friction={0.7}
         >
           <mesh position-y={-1.25} receiveShadow>
             <boxGeometry args={[10, 0.5, 10]} />
