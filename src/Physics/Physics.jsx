@@ -38,7 +38,7 @@ export default function PhysicsExperience() {
       />
       {/* // * ambient no shadow */}
       <ambientLight intensity={0.5} />
-      <Physics>
+      <Physics gravity={[0, -9.08, 0]}>
         <Debug></Debug>
         <RigidBody
           //  * shape of the wrapper
@@ -83,7 +83,14 @@ export default function PhysicsExperience() {
             <meshStandardMaterial color="mediumpurple"></meshStandardMaterial>
           </mesh>
         </RigidBody> */}
-        <RigidBody ref={cube} position={[1.5, 2, 0]}>
+        <RigidBody
+          ref={cube}
+          position={[1.5, 2, 0]}
+          // * independent grayity for individual object
+          gravityScale={1}
+          // * bounce rate
+          restitution={1}
+        >
           {/* <mesh
             ref={cube}
             position={[2, 2, 0]}
@@ -108,6 +115,7 @@ export default function PhysicsExperience() {
         <RigidBody
           // * no go through,will stay there,but need rigid body to make collision
           type="fixed"
+          restitution={1}
         >
           <mesh position-y={-1.25} receiveShadow>
             <boxGeometry args={[10, 0.5, 10]} />
