@@ -12,10 +12,21 @@ import {
 export default function PhysicsExperience() {
   const cube = useRef();
 
-  useFrame((state, delta) => {
-    // cube.current.rotation.y += delta * 0.2;
-  });
+  // useFrame((state, delta) => {
+  //   // cube.current.rotation.y += delta * 0.2;
+  // });
 
+  const cubeJump = () => {
+    console.log("jump");
+    // * 一个脉冲量
+    cube.current.applyImpulse({ x: 0, y: 5, z: 0 });
+    // * 一个 转脉冲量
+    cube.current.applyTorqueImpulse({
+      x: Math.random() - 0.5,
+      y: Math.random() - 0.5,
+      z: Math.random() - 0.5,
+    });
+  };
   return (
     <>
       <OrbitControls makeDefault />
@@ -25,28 +36,33 @@ export default function PhysicsExperience() {
         position={[1, 2, 3]}
         intensity={1.5}
       />
-      <ambientLight castShadow intensity={0.5} />
+      {/* // * ambient no shadow */}
+      <ambientLight intensity={0.5} />
       <Physics>
         <Debug></Debug>
         <RigidBody
           //  * shape of the wrapper
           colliders="ball"
+          position={[-1.5, 2, 0]}
         >
-          <mesh position={[0, 4, 0]} castShadow>
+          <mesh
+            //  position={[0, 4, 0]}
+            castShadow
+          >
             <sphereGeometry />
             <meshStandardMaterial color="orange" />
           </mesh>
         </RigidBody>
 
-        <RigidBody
+        {/* <RigidBody
           // * fit the shape as much as possible
           // colliders="hull"
           // * avoid using it with dynamic body(fast moving),too fast, it will go through,
           // colliders="trimesh"
           colliders={false}
-        >
-          {/* // * Cubid collider itself, args half depth x,y,z */}
-          {/* <CuboidCollider
+        > */}
+        {/* // * Cubid collider itself, args half depth x,y,z */}
+        {/* <CuboidCollider
             args={[1.5, 1.5, 0.5]}
           ></CuboidCollider>
           <CuboidCollider
@@ -54,8 +70,8 @@ export default function PhysicsExperience() {
             position={[0, 0, 1]}
             rotation={[-Math.PI * 0.35, 0, 0]}
           ></CuboidCollider> */}
-          {/*  // * generate the feeling of collision */}
-          <BallCollider args={[1.5]}></BallCollider>
+        {/*  // * generate the feeling of collision */}
+        {/* <BallCollider args={[1.5]}></BallCollider>
           <mesh
             castShadow
             // position={[0, 1, 0]}
@@ -66,9 +82,9 @@ export default function PhysicsExperience() {
             ></torusGeometry>
             <meshStandardMaterial color="mediumpurple"></meshStandardMaterial>
           </mesh>
-        </RigidBody>
-        {/* <RigidBody>
-          <mesh
+        </RigidBody> */}
+        <RigidBody ref={cube} position={[1.5, 2, 0]}>
+          {/* <mesh
             ref={cube}
             position={[2, 2, 0]}
             scale={1.5}
@@ -76,18 +92,18 @@ export default function PhysicsExperience() {
           >
             <boxGeometry args={[3, 2, 1]} />
             <meshStandardMaterial color="mediumpurple" />
-          </mesh>
+          </mesh> */}
 
           <mesh
-            ref={cube}
-            position={[2, 2, 3]}
-            scale={1.5}
+            // position={[2, 2, 3]}
+            // scale={1.5}
             castShadow
+            onClick={cubeJump}
           >
             <boxGeometry args={[1, 1, 1]} />
             <meshStandardMaterial color="mediumpurple" />
           </mesh>
-        </RigidBody> */}
+        </RigidBody>
 
         <RigidBody
           // * no go through,will stay there,but need rigid body to make collision
