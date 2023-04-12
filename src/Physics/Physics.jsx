@@ -1,5 +1,5 @@
 import { useFrame } from "@react-three/fiber";
-import { OrbitControls } from "@react-three/drei";
+import { OrbitControls, useGLTF } from "@react-three/drei";
 import { useRef, useState } from "react";
 import {
   Debug,
@@ -7,13 +7,14 @@ import {
   RigidBody,
   CuboidCollider,
   BallCollider,
+  CylinderCollider,
 } from "@react-three/rapier";
 import { Euler, Quaternion } from "three";
 
 export default function PhysicsExperience() {
   // * will import sound once.store in the state
   // * reason: The useState() hook supports lazy initialization, which means that if it receives a function, it will call it on the first (and only) render. The returned value would be used as the initial state.
-
+  const hamburger = useGLTF("/public/hamburger.glb");
   const [hitSound] = useState(
     () => new Audio("/public/hit.mp3")
   );
@@ -74,6 +75,7 @@ export default function PhysicsExperience() {
       {/* // * ambient no shadow */}
       <ambientLight intensity={0.5} />
       <Physics gravity={[0, -9.08, 0]}>
+        {/* // * showing the colliders wireframe */}
         <Debug></Debug>
         <RigidBody
           //  * shape of the wrapper
@@ -129,17 +131,17 @@ export default function PhysicsExperience() {
           friction={0.7}
           colliders={false}
           onCollisionEnter={collisionEnter}
-          onCollisionExit={() => {
-            console.log("exit");
-          }}
+          // onCollisionExit={() => {
+          //   console.log("exit");
+          // }}
           // * for performance, object does not move for some time, it will consider 'sleep'
-          onSleep={() => {
-            console.log("sleep");
-          }}
+          // onSleep={() => {
+          //   console.log("sleep");
+          // }}
           // * awake after applying an impulse
-          onWake={() => {
-            console.log("wake");
-          }}
+          // onWake={() => {
+          //   console.log("wake");
+          // }}
         >
           {/* <mesh
             ref={cube}
@@ -190,6 +192,23 @@ export default function PhysicsExperience() {
             <boxGeometry />
             <meshStandardMaterial color="red" />
           </mesh>
+        </RigidBody>
+
+        <RigidBody
+          // * hull will has some bugs
+          colliders={false}
+          position={[0, 4, 0]}
+        >
+          <primitive
+            object={hamburger.scene}
+            scale={0.25}
+          />
+          <CylinderCollider args={[0.5, 1.25]}>
+            <primitive
+              object={hamburger.scene}
+              scale={0.25}
+            />
+          </CylinderCollider>
         </RigidBody>
       </Physics>
     </>
