@@ -1,6 +1,6 @@
 import { useFrame } from "@react-three/fiber";
 import { OrbitControls } from "@react-three/drei";
-import { useRef } from "react";
+import { useRef, useState } from "react";
 import {
   Debug,
   Physics,
@@ -11,6 +11,13 @@ import {
 import { Euler, Quaternion } from "three";
 
 export default function PhysicsExperience() {
+  // * will import sound once.store in the state
+  // * reason: The useState() hook supports lazy initialization, which means that if it receives a function, it will call it on the first (and only) render. The returned value would be used as the initial state.
+
+  const [hitSound] = useState(
+    () => new Audio("/public/hit.mp3")
+  );
+
   const cube = useRef();
   const twister = useRef();
   useFrame((state, delta) => {
@@ -47,6 +54,13 @@ export default function PhysicsExperience() {
       y: Math.random() - 0.5,
       z: Math.random() - 0.5,
     });
+  };
+
+  const collisionEnter = () => {
+    console.log("collision");
+    hitSound.currentTime = 0;
+    hitSound.volume = Math.random();
+    hitSound.play();
   };
   return (
     <>
@@ -114,6 +128,18 @@ export default function PhysicsExperience() {
           restitution={1}
           friction={0.7}
           colliders={false}
+          onCollisionEnter={collisionEnter}
+          onCollisionExit={() => {
+            console.log("exit");
+          }}
+          // * for performance, object does not move for some time, it will consider 'sleep'
+          onSleep={() => {
+            console.log("sleep");
+          }}
+          // * awake after applying an impulse
+          onWake={() => {
+            console.log("wake");
+          }}
         >
           {/* <mesh
             ref={cube}
