@@ -8,13 +8,32 @@ import {
   CuboidCollider,
   BallCollider,
 } from "@react-three/rapier";
+import { Euler, Quaternion } from "three";
 
 export default function PhysicsExperience() {
   const cube = useRef();
+  const twister = useRef();
+  useFrame((state, delta) => {
+    // cube.current.rotation.y += delta * 0.2;
+    const time = state.clock.elapsedTime;
+    // * 转量 y-axis
+    const eulerRoation = new Euler(0, time * 3, 0);
+    const quaternionRotation = new Quaternion();
+    quaternionRotation.setFromEuler(eulerRoation);
+    // * 提供给一个转量 Quaternion type
+    twister.current.setNextKinematicRotation(
+      quaternionRotation
+    );
 
-  // useFrame((state, delta) => {
-  //   // cube.current.rotation.y += delta * 0.2;
-  // });
+    const angle = time * 0.5;
+    const x = Math.cos(angle);
+    const z = Math.sin(angle);
+    twister.current.setNextKinematicTranslation({
+      x: x,
+      y: -0.8,
+      z: z,
+    });
+  });
 
   const cubeJump = () => {
     console.log("jump");
@@ -87,6 +106,7 @@ export default function PhysicsExperience() {
         </RigidBody> */}
         <RigidBody
           ref={cube}
+          // * avoid change the position directly if using physics, apply force if neccessary
           position={[1.5, 2, 0]}
           // * independent grayity for individual object
           gravityScale={1}
@@ -130,6 +150,19 @@ export default function PhysicsExperience() {
           <mesh position-y={-1.25} receiveShadow>
             <boxGeometry args={[10, 0.5, 10]} />
             <meshStandardMaterial color="greenyellow" />
+          </mesh>
+        </RigidBody>
+
+        <RigidBody
+          position={[0, -0.8, 0]}
+          friction={0}
+          // * if will calculate the velocity upon on that desired position
+          type="kinematicPosition"
+          ref={twister}
+        >
+          <mesh castShadow scale={[0.4, 0.4, 3]}>
+            <boxGeometry />
+            <meshStandardMaterial color="red" />
           </mesh>
         </RigidBody>
       </Physics>
